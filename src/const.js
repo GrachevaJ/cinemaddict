@@ -1,4 +1,4 @@
-const FILM_COUNT = 12;
+const FILM_COUNT = 13;
 
 const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
 
