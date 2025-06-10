@@ -56,8 +56,7 @@ export default class FilmsPresenter {
     // render(new FilmDetailsView(this.#films[0], comments), this.#container.parentElement);
   };
 
-  #handleLoadMoreButtonClick = (evt) => {
-    evt.preventDefault();
+  #handleLoadMoreButtonClick = () => {
     this.#films
       .slice(this.#renderedFilmCount, this.#renderedFilmCount + FILM_COUNT_PER_STEP) // слайсим от индекса 4(тех что уже отрисованы) до индекса 9 (при уувеличении счетчика это будет 9 и 14 и тд)
       .forEach((film) => this.#renderFilm(film));
@@ -93,12 +92,12 @@ export default class FilmsPresenter {
       }
     };
 
-    filmComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
+    filmComponent.setEditClickHandler(() => {
       openFilmDetails();
       document.addEventListener('keydown', onEscKeyDown);
     });
 
-    filmDetailsComponent.element.querySelector('.film-details__close-btn').addEventListener('click', () => {
+    filmDetailsComponent.setClickHandler(() => {
       closeFilmDetails();
       document.removeEventListener('keydown', onEscKeyDown);
     });
