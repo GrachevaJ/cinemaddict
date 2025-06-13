@@ -25,35 +25,38 @@ export default class FilmsPresenter {
   #filmListContainerComponent = new FilmListContainerView();
   #filmButtonMoreComponent = new FilmButtonMoreView();
 
-  init = (container, filmsModel, commentsModel) => {
+  constructor(container, filmsModel, commentsModel) {
     this.#container = container;
     this.#filmsModel = filmsModel;
     this.#commentsModel = commentsModel;
+  }
 
+  init = () => {
     this.#films = [...this.#filmsModel.films];
+
+    this.#renderFilms();
+  };
+
+  #renderFilms = () => {
 
     if (this.#films.length === 0) {
       render(new NoFilmView(), this.#container);
+      return;
     }
-    else {  render(this.#sortComponent, this.#container);
-      render(this.#filmsComponent, this.#container);
-      render(this.#filmListComponent, this.#filmsComponent.element);
-      render(this.#filmListContainerComponent, this.#filmListComponent.element);
 
-      // for (let i = 0; i < this.#films.length; i++) {
-      //   render(new FilmCardView(this.#films[i]), this.#filmListContainerComponent.element);
-      // }
-      for(let i = 0; i < Math.min(this.#films.length, FILM_COUNT_PER_STEP); i++) {
-        this.#renderFilm(this.#films[i]);
-      }
+    render(this.#sortComponent, this.#container);
+    render(this.#filmsComponent, this.#container);
+    render(this.#filmListComponent, this.#filmsComponent.element);
+    render(this.#filmListContainerComponent, this.#filmListComponent.element);
 
-      if (this.#films.length > FILM_COUNT_PER_STEP) {
-        render(this.#filmButtonMoreComponent, this.#filmListComponent.element);
-        this.#filmButtonMoreComponent.element.addEventListener('click', this.#handleLoadMoreButtonClick);
-      }}
-    // const comments = [...this.#commentsModel.get(this.#films[0])];
+    for(let i = 0; i < Math.min(this.#films.length, FILM_COUNT_PER_STEP); i++) {
+      this.#renderFilm(this.#films[i]);
+    }
 
-    // render(new FilmDetailsView(this.#films[0], comments), this.#container.parentElement);
+    if (this.#films.length > FILM_COUNT_PER_STEP) {
+      render(this.#filmButtonMoreComponent, this.#filmListComponent.element);
+      this.#filmButtonMoreComponent.element.addEventListener('click', this.#handleLoadMoreButtonClick);
+    }
   };
 
   #handleLoadMoreButtonClick = () => {
