@@ -7,7 +7,7 @@ import FilmCardView from '../view/film-card-view.js';
 import FilmDetailsView from '../view/film-details-view.js';
 import NoFilmView from '../view/no-film-view.js';
 
-import { render } from '../framework/render.js';
+import { render, RenderPosition } from '../framework/render.js';
 
 const FILM_COUNT_PER_STEP = 5;
 
@@ -24,6 +24,7 @@ export default class FilmsPresenter {
   #filmListComponent = new FilmListView();
   #filmListContainerComponent = new FilmListContainerView();
   #filmButtonMoreComponent = new FilmButtonMoreView();
+  #noFilmComponent = new NoFilmView();
 
   constructor(container, filmsModel, commentsModel) {
     this.#container = container;
@@ -37,26 +38,45 @@ export default class FilmsPresenter {
     this.#renderFilms();
   };
 
-  #renderFilms = () => {
+  #renderNofilms = () => {
+    render(this.#noFilmComponent, this.#container);
+  };
 
-    if (this.#films.length === 0) {
-      render(new NoFilmView(), this.#container);
-      return;
-    }
-
+  #renderSort = () => {
     render(this.#sortComponent, this.#container);
+  };
+
+  #renderFilmMoreButton = () => {
+    render(this.#filmButtonMoreComponent, this.#filmListComponent.element);
+
+    this.#filmButtonMoreComponent.element.addEventListener('click', this.#handleLoadMoreButtonClick);
+  };
+
+  #renderFilmsSlice = (from, to) => {
+    this.#films.slice(from, to).forEach((film) => this.#renderFilm(film));
+  };
+
+  #renderFilmList = () => {
     render(this.#filmsComponent, this.#container);
     render(this.#filmListComponent, this.#filmsComponent.element);
     render(this.#filmListContainerComponent, this.#filmListComponent.element);
-
-    for(let i = 0; i < Math.min(this.#films.length, FILM_COUNT_PER_STEP); i++) {
-      this.#renderFilm(this.#films[i]);
-    }
+    this.#renderFilmsSlice(0,  Math.min(this.#films.length, FILM_COUNT_PER_STEP));
 
     if (this.#films.length > FILM_COUNT_PER_STEP) {
-      render(this.#filmButtonMoreComponent, this.#filmListComponent.element);
-      this.#filmButtonMoreComponent.element.addEventListener('click', this.#handleLoadMoreButtonClick);
+      this.#renderFilmMoreButton();
     }
+  };
+
+  #renderFilms = () => {
+
+
+    if (this.#films.length === 0) {
+      this.#renderNofilms();
+      return;
+    }
+
+    this.#renderSort();
+    this.#renderFilmList();
   };
 
   #handleLoadMoreButtonClick = () => {
