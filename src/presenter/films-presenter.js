@@ -3,11 +3,10 @@ import FilmsView from '../view/films-view.js';
 import FilmListView from '../view/film-list-view.js';
 import FilmListContainerView from '../view/film-list-container-view.js';
 import FilmButtonMoreView from '../view/film-button-more-view.js';
-import FilmCardView from '../view/film-card-view.js';
-import FilmDetailsView from '../view/film-details-view.js';
 import NoFilmView from '../view/no-film-view.js';
+import FilmPresenter from './film-presenter.js';
 
-import { render, RenderPosition } from '../framework/render.js';
+import {render} from '../framework/render.js';
 
 const FILM_COUNT_PER_STEP = 5;
 
@@ -93,38 +92,8 @@ export default class FilmsPresenter {
   };
 
   #renderFilm = (film) => {
-    const filmComponent = new FilmCardView(film);
-    const comments = this.#commentsModel.get(film);
-    const filmDetailsComponent = new FilmDetailsView(film, comments);
+    const filmPresenter = new FilmPresenter(this.#filmListComponent.element);
 
-    const openFilmDetails = () => {
-      document.querySelector('body').classList.add('hide-overflow');
-      this.#container.parentElement.appendChild(filmDetailsComponent.element);
-    };
-
-    const closeFilmDetails = () => {
-      document.querySelector('body').classList.remove('hide-overflow');
-      this.#container.parentElement.removeChild(filmDetailsComponent.element);
-    };
-
-    const onEscKeyDown = (evt) => {
-      if(evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        closeFilmDetails();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
-    filmComponent.setEditClickHandler(() => {
-      openFilmDetails();
-      document.addEventListener('keydown', onEscKeyDown);
-    });
-
-    filmDetailsComponent.setClickHandler(() => {
-      closeFilmDetails();
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
-
-    render(filmComponent, this.#filmListContainerComponent.element);
+    filmPresenter.init(film);
   };
 }
