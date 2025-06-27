@@ -14,11 +14,11 @@ export default class FilmPresenter {
     this.#filmListContainer = filmListContainer;
   }
 
-  init = (film) => {
+  init = (film, comments) => {
     this.#film = film;
 
     this.#filmComponent = new FilmCardView(film);
-    this.#filmDetailsComponent = new FilmDetailsView(film);
+    this.#filmDetailsComponent = new FilmDetailsView(film, comments);
 
     this.#filmComponent.setEditClickHandler(this.#handleEditClick);
 
@@ -30,7 +30,7 @@ export default class FilmPresenter {
   #openFilmDetails = () => {
     document.querySelector('body').classList.add('hide-overflow');
 
-    this.#filmListContainer.parentElement.appendChild(this.#filmDetailsComponent);
+    this.#filmListContainer.parentElement.appendChild(this.#filmDetailsComponent.element);
 
     document.addEventListener('keydown', this.#escKeyDownHandler);
   };
@@ -38,7 +38,7 @@ export default class FilmPresenter {
   #closeFilmDetails = () => {
     document.querySelector('body').classList.remove('hide-overflow');
 
-    this.#filmListContainer.parentElement.removeChild(this.#filmDetailsComponent);
+    this.#filmListContainer.parentElement.removeChild(this.#filmDetailsComponent.element);
 
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };

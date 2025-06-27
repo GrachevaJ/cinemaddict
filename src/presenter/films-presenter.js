@@ -3,6 +3,8 @@ import FilmsView from '../view/films-view.js';
 import FilmListView from '../view/film-list-view.js';
 import FilmListContainerView from '../view/film-list-container-view.js';
 import FilmButtonMoreView from '../view/film-button-more-view.js';
+// import FilmCardView from '../view/film-card-view.js';
+// import FilmDetailsView from '../view/film-details-view.js';
 import NoFilmView from '../view/no-film-view.js';
 import FilmPresenter from './film-presenter.js';
 
@@ -92,8 +94,9 @@ export default class FilmsPresenter {
   };
 
   #renderFilm = (film) => {
-    const filmPresenter = new FilmPresenter(this.#filmListComponent.element);
+    const comments = this.#commentsModel.get(film);
+    const filmPresenter = new FilmPresenter(this.#filmListContainerComponent.element);
 
-    filmPresenter.init(film);
+    filmPresenter.init(film, comments);
   };
 }
