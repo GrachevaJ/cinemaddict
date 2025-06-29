@@ -1,4 +1,4 @@
-import { render } from '../framework/render.js';
+import { render, remove, replace } from '../framework/render.js';
 import FilmCardView from '../view/film-card-view.js';
 import FilmDetailsView from '../view/film-details-view.js';
 
@@ -17,6 +17,9 @@ export default class FilmPresenter {
   init = (film, comments) => {
     this.#film = film;
 
+    const prevFilmComponent = this.#filmComponent;
+    const prevFilmDetailsComponent = this.#filmDetailsComponent;
+
     this.#filmComponent = new FilmCardView(film);
     this.#filmDetailsComponent = new FilmDetailsView(film, comments);
 
@@ -24,7 +27,26 @@ export default class FilmPresenter {
 
     this.#filmDetailsComponent.setClickHandler(this.#handleClick);
 
-    render(this.#filmComponent, this.#filmListContainer);
+    if (prevFilmComponent === null || prevFilmDetailsComponent === null) {
+      render(this.#filmComponent, this.#filmListContainer);
+      return;
+    }
+
+    if (this.#filmListContainer.contains(prevFilmComponent.element)) {
+      replace(this.#filmComponent, prevFilmComponent);
+    }
+
+    if (this.#filmListContainer.contains(prevFilmDetailsComponent.element)) {
+      replace(this.#filmDetailsComponent, prevFilmDetailsComponent);
+    }
+
+    remove(prevFilmComponent);
+    remove(prevFilmDetailsComponent);
+  };
+
+  destroy = () => {
+    remove(this.#filmComponent);
+    remove(this.#filmDetailsComponent);
   };
 
   #openFilmDetails = () => {
