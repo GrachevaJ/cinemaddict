@@ -8,7 +8,7 @@ import FilmButtonMoreView from '../view/film-button-more-view.js';
 import NoFilmView from '../view/no-film-view.js';
 import FilmPresenter from './film-presenter.js';
 
-import {render} from '../framework/render.js';
+import {render, remove} from '../framework/render.js';
 
 const FILM_COUNT_PER_STEP = 5;
 
@@ -19,6 +19,7 @@ export default class FilmsPresenter {
 
   #films = [];
   #renderedFilmCount = FILM_COUNT_PER_STEP;
+  #filmPresenter = new Map();
 
   #sortComponent = new SortView();
   #filmsComponent = new FilmsView();
@@ -98,5 +99,13 @@ export default class FilmsPresenter {
     const filmPresenter = new FilmPresenter(this.#filmListContainerComponent.element);
 
     filmPresenter.init(film, comments);
+    this.#filmPresenter.set(film.id, filmPresenter);
+  };
+
+  #clearFilmList = () => {
+    this.#filmPresenter.forEach((presenter) => presenter.destroy());
+    this.#filmPresenter.clear();
+    this.#renderedFilmCount = FILM_COUNT_PER_STEP;
+    remove(this.#handleLoadMoreButtonClick);
   };
 }
