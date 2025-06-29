@@ -9,6 +9,7 @@ import NoFilmView from '../view/no-film-view.js';
 import FilmPresenter from './film-presenter.js';
 
 import {render, remove} from '../framework/render.js';
+import {updateItem} from '../utils.js';
 
 const FILM_COUNT_PER_STEP = 5;
 
@@ -43,6 +44,11 @@ export default class FilmsPresenter {
   #renderNofilms = () => {
     render(this.#noFilmComponent, this.#container);
   };
+
+  #handleFilmChange = (updatedFilm) => {
+    this.#films = updateItem(this.#films, updatedFilm);
+    this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
+  }
 
   #renderSort = () => {
     render(this.#sortComponent, this.#container);
