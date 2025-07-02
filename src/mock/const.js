@@ -22,6 +22,11 @@ const Runtime = {
   MAX: 180
 };
 
+const DateType = {
+  FILM_INFO: 'FILM_INFO',
+  USER_DETAILS: 'USER_DETAILS'
+};
+
 const YearsDuration = {
   MIN: 5,
   MAX: 10
@@ -108,6 +113,7 @@ export {
   Rating,
   AgeRating,
   Runtime,
+  DateType,
   YearsDuration,
   DaysDuration,
   names,

@@ -3,8 +3,6 @@ import FilmsView from '../view/films-view.js';
 import FilmListView from '../view/film-list-view.js';
 import FilmListContainerView from '../view/film-list-container-view.js';
 import FilmButtonMoreView from '../view/film-button-more-view.js';
-// import FilmCardView from '../view/film-card-view.js';
-// import FilmDetailsView from '../view/film-details-view.js';
 import NoFilmView from '../view/no-film-view.js';
 import FilmPresenter from './film-presenter.js';
 
@@ -48,7 +46,7 @@ export default class FilmsPresenter {
   #handleFilmChange = (updatedFilm) => {
     this.#films = updateItem(this.#films, updatedFilm);
     this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
-  }
+  };
 
   #renderSort = () => {
     render(this.#sortComponent, this.#container);
@@ -102,7 +100,7 @@ export default class FilmsPresenter {
 
   #renderFilm = (film) => {
     const comments = this.#commentsModel.get(film);
-    const filmPresenter = new FilmPresenter(this.#filmListContainerComponent.element);
+    const filmPresenter = new FilmPresenter(this.#filmListContainerComponent.element, this.#handleFilmChange);
 
     filmPresenter.init(film, comments);
     this.#filmPresenter.set(film.id, filmPresenter);
