@@ -1,82 +1,83 @@
 import { render, remove, replace } from '../framework/render.js';
 import FilmCardView from '../view/film-card-view.js';
-import FilmDetailsView from '../view/film-details-view.js';
 
 export default class FilmPresenter {
   #filmListContainer = null;
 
+  #changeData = null;
+  #clickCardHandler = null;
+  #escKeyDownHandler = null;
+
   #filmComponent = null;
-  #filmDetailsComponent = null;
+
 
   #film = null;
 
-  constructor(filmListContainer) {
+  constructor(filmListContainer, changeData, clickCardHander, escKeyDownHandler) {
     this.#filmListContainer = filmListContainer;
+    this.#changeData = changeData;
+    this.#clickCardHandler = clickCardHander;
+    this.#escKeyDownHandler = escKeyDownHandler;
   }
 
-  init = (film, comments) => {
+  init = (film) => {
     this.#film = film;
 
     const prevFilmComponent = this.#filmComponent;
-    const prevFilmDetailsComponent = this.#filmDetailsComponent;
 
-    this.#filmComponent = new FilmCardView(film);
-    this.#filmDetailsComponent = new FilmDetailsView(film, comments);
+    this.#filmComponent = new FilmCardView(this.#film);
 
-    this.#filmComponent.setEditClickHandler(this.#handleEditClick);
+    this.#filmComponent.setCardClickHandler(() => {
+      this.#clickCardHandler(this.#film);
+      document.addEventListener('keydown', this.#escKeyDownHandler);
+    });
 
-    this.#filmDetailsComponent.setClickHandler(this.#handleClick);
+    this.#filmComponent.setWatchlistBtnClickHandler(this.#watchlistBtnClickHandler);
+    this.#filmComponent.setWatchedBtnClickHandler(this.#watchedBtnClickHandler);
+    this.#filmComponent.setFavoriteBtnClickHandler(this.#favoriteBtnClickHandler);
 
-    if (prevFilmComponent === null || prevFilmDetailsComponent === null) {
-      render(this.#filmComponent, this.#filmListContainer);
+
+    if (prevFilmComponent === null) {
+      render(this.#filmComponent, this.#filmListContainer.element);
       return;
     }
 
-    if (this.#filmListContainer.contains(prevFilmComponent.element)) {
-      replace(this.#filmComponent, prevFilmComponent);
-    }
-
-    if (this.#filmListContainer.contains(prevFilmDetailsComponent.element)) {
-      replace(this.#filmDetailsComponent, prevFilmDetailsComponent);
-    }
+    replace(this.#filmComponent, prevFilmComponent);
 
     remove(prevFilmComponent);
-    remove(prevFilmDetailsComponent);
   };
 
   destroy = () => {
     remove(this.#filmComponent);
-    remove(this.#filmDetailsComponent);
   };
 
-  #openFilmDetails = () => {
-    document.querySelector('body').classList.add('hide-overflow');
-
-    this.#filmListContainer.parentElement.appendChild(this.#filmDetailsComponent.element);
-
-    document.addEventListener('keydown', this.#escKeyDownHandler);
+  #watchlistBtnClickHandler = () => {
+    this.#changeData({
+      ...this.#film,
+      userDetails: {
+        ...this.#film.userDetails,
+        watchlist: !this.#film.userDetails.watchlist
+      },
+    });
   };
 
-  #closeFilmDetails = () => {
-    document.querySelector('body').classList.remove('hide-overflow');
-
-    this.#filmListContainer.parentElement.removeChild(this.#filmDetailsComponent.element);
-
-    document.removeEventListener('keydown', this.#escKeyDownHandler);
+  #watchedBtnClickHandler = () => {
+    this.#changeData({
+      ...this.#film,
+      userDetails: {
+        ...this.#film.userDetails,
+        alreadyWatched: !this.#film.userDetails.alreadyWatched
+      }
+    });
   };
 
-  #escKeyDownHandler = (evt) => {
-    if(evt.key === 'Escape' || evt.key === 'Esc') {
-      evt.preventDefault();
-      this.#closeFilmDetails();
-    }
-  };
-
-  #handleEditClick = () => {
-    this.#openFilmDetails();
-  };
-
-  #handleClick = () => {
-    this.#closeFilmDetails();
+  #favoriteBtnClickHandler = () => {
+    this.#changeData({
+      ...this.#film,
+      userDetails: {
+        ...this.#film.userDetails,
+        favorite: !this.#film.userDetails.favorite
+      }
+    });
   };
 }

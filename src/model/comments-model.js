@@ -11,7 +11,7 @@ export default class CommentsModel {
   }
 
   generateAllComments() {
-    this.#allComments = generateComments(this.#filmsModel.films);
+    this.#allComments = generateComments(this.#filmsModel.get());
   }
 
   //Метод find()экземпляров Arrayвозвращает первый элемент в предоставленном массиве, который удовлетворяет предоставленной функции тестирования. Если ни одно значение не удовлетворяет функции тестирования, undefinedвозвращается.
