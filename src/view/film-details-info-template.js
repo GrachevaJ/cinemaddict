@@ -1,4 +1,4 @@
-import {formatStringToDate, formatMinutesToTime} from '../utils.js';
+import {formatStringToDate, formatMinutesToTime} from '../utils/utils.js';
 
 const generateNameList = (names) =>
   (names.length < 1)

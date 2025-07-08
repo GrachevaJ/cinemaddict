@@ -8,7 +8,7 @@ import FilmPresenter from './film-presenter.js';
 import FilmDetailsPresenter from './film-details-presenter.js';
 
 import {render} from '../framework/render.js';
-import {updateItem} from '../utils.js';
+import {updateItem} from '../utils/utils.js';
 
 const FILM_COUNT_PER_STEP = 5;
 

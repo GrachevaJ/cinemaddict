@@ -1,10 +1,9 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { getUserStatus } from '../mock/user.js';
 
-const createHeaderProfileTemplate = (films) =>
+const createHeaderProfileTemplate = (userStatus) =>
   `
     <section class="header__profile profile">
-      <p class="profile__rating">${getUserStatus(films)}</p>
+      ${(userStatus !== null) ? `<p class="profile__rating">${userStatus}</p>` : ''}
       <img
         class="profile__avatar"
         src="images/bitmap@2x.png"
@@ -16,14 +15,14 @@ const createHeaderProfileTemplate = (films) =>
   `;
 
 export default class HeaderProfileView extends AbstractView {
-  #films = null;
+  #userStatus = null;
 
-  constructor(films) {
+  constructor(userStatus) {
     super();
-    this.#films = films;
+    this.#userStatus = userStatus;
   }
 
   get template() {
-    return createHeaderProfileTemplate(this.#films);
+    return createHeaderProfileTemplate(this.#userStatus);
   }
 }

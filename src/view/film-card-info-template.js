@@ -1,4 +1,4 @@
-import {formatStringToYear, formatMinutesToTime} from '../utils.js';
+import {formatStringToYear, formatMinutesToTime} from '../utils/utils.js';
 
 export const createFilmCardInfoTemplate = (filmInfo, commentsLength) => {
   const {

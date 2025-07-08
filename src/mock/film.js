@@ -1,5 +1,5 @@
-import {getRandomInteger, getRandomValue} from '../utils.js';
-import {FILM_COUNT} from '../const.js';
+import {getRandomInteger, getRandomValue} from '../utils/utils.js';
+import {FILM_COUNT} from '../utils/const.js';
 import {
   NAME_COUNT, MAX_COMMENTS_ON_FILM, GenreCount, Rating,
   AgeRating, Runtime, DateType, DaysDuration, YearsDuration, names, surnames,

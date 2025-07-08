@@ -28,4 +28,4 @@ const getUserStatus = (films) => {
   return null;
 };
 
-export {getUserStatus}
+export {getUserStatus};
