@@ -11,9 +11,16 @@ const FilterType = {
   WATCHLIST: 'watchlist'
 };
 
+const SortType = {
+  DEFAULT: 'default',
+  DATE: 'date',
+  RATING: 'rating'
+};
+
 export {
   FILM_COUNT,
   EMOTIONS,
   FilterType,
-  FILTER_TYPE_ALL_NAME
+  FILTER_TYPE_ALL_NAME,
+  SortType
 };

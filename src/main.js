@@ -30,3 +30,4 @@ render(new FilterView(filters), siteMainElement);
 render(new FooterStatisticView(filmCount), siteFooterStatisticsElement);
 
 filmsPresenter.init();
+
